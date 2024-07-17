@@ -40,6 +40,15 @@ Resources:
       Runtime: python3.11
       Architectures:
       - x86_64
+      Policies:
+        - Statement:
+          - Effect: Allow
+            Sid: BedrockRuntime
+            Action:
+              - bedrock:RetrieveAndGenerate
+              - bedrock:Retrieve
+              - bedrock:InvokeModel
+            Resource: "*"
 
   LineFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

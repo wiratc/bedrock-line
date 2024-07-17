@@ -15,18 +15,12 @@ def lambda_handler(event, context):
     body = json.loads(event["body"])
     config = json.load(open("config.json"))
 
-    destination = body["destination"]
-    bot_config = config[destination]
+    userId = body["events"][0]["source"]["userId"]
+    bot_config = config[userId]
 
-    LINE_TOKEN = bot_config["LINE_TOKEN"]
-    base_url = bot_config["base_url"]
-    api_key = bot_config["api_key"]
-
-    body["line_token"] = LINE_TOKEN
-    body["base_url"] = base_url
-    body["api_key"] = api_key
-
+    body["bot_config"] = bot_config
     lambda_client = boto3.client("lambda")
+
     response = lambda_client.invoke(
         FunctionName=function_name, InvocationType="Event", Payload=json.dumps(body)
     )
