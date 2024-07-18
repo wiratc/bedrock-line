@@ -48,6 +48,7 @@ Resources:
               - bedrock:RetrieveAndGenerate
               - bedrock:Retrieve
               - bedrock:InvokeModel
+              - bedrock:InvokeAgent 
             Resource: "*"
 
   LineFunction:

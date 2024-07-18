@@ -1,8 +1,48 @@
 import json
-
 import requests
+import uuid
 
 import boto3
+
+
+def get_bedrock_agent_response(event):
+    line_event = event["events"][0]
+    message = line_event["message"]["text"]
+    bot_config = event["bot_config"]
+    agentId = bot_config["agentId"]
+    agentAliasId = bot_config["agentAliasId"]
+    bedrock = boto3.client("bedrock-agent-runtime", region_name="us-east-1")
+    session_id = uuid.uuid4().hex
+    response = bedrock.invoke_agent(
+        agentId=agentId,
+        agentAliasId=agentAliasId,
+        inputText=message,
+        sessionId=session_id,
+    )
+    completion = ""
+    message_body = []
+    citations = []
+
+    for event in response.get("completion"):
+        chunk = event["chunk"]
+        citations += chunk["attribution"]["citations"]
+        completion += chunk["bytes"].decode()
+
+    message_body.append({"type": "text", "text": completion})
+
+    print(json.dumps(citations))
+
+    for citation in citations:
+        message_body.append(
+            {
+                "type": "text",
+                "text": citation["generatedResponsePart"]["textResponsePart"]["text"],
+            }
+        )
+        for reference in citation["retrievedReferences"]:
+            message_body.append({"type": "text", "text": reference["content"]["text"]})
+
+    return message_body
 
 
 def get_bedrock_kb_response(event):
@@ -128,6 +168,7 @@ def lambda_handler(event, context):
     generate_responsefn = {
         "apigateway": get_apigateway_response,
         "bedrock-kb": get_bedrock_kb_response,
+        "bedrock-agent": get_bedrock_agent_response,
     }
 
     fn = generate_responsefn[type]
