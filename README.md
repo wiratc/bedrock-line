@@ -87,8 +87,7 @@ sam deploy
 ```
 ### 6. After deployment, note the output URL. This will be your webhook URL🔗
   The URL will be in the 'Value' field from 'HelloWorldApi' key
-
-  ![image](https://github.com/user-attachments/assets/a646f759-eb70-409b-a7ae-57244d9b7306)
+  ![image](https://github.com/user-attachments/assets/997d0d0b-51dd-45a0-a169-c4b4dfe07d46)
 
 
 ### 7. In the LINE Developers Console 📝:
