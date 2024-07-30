@@ -15,7 +15,7 @@ def lambda_handler(event, context):
     body = json.loads(event["body"])
     config = json.load(open("config.json"))
 
-    userId = body["events"][0]["source"]["userId"]
+    userId = body["destination"]
     bot_config = config[userId]
 
     body["bot_config"] = bot_config
