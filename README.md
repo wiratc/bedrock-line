@@ -44,7 +44,7 @@ git clone <repository-url>
 
 ```
 {
-    "<your-line-user-id>":{
+    "<your-line-uid>":{
         "LINE_TOKEN": "<your-line-channel-access-token>",
         "type": "bedrock-agent",
         "agentId": "<your-bedrock-agent-id>",
